@@ -9,7 +9,10 @@ ENV USER $USER
 # Create the user
 RUN adduser --disabled-password --gecos '' $USER && \
     adduser $USER sudo; echo '%sudo ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers && \
-    usermod -a -G $USER $USER
+    usermod -a -G $USER $USER && \
+    userdel sudofoam && \
+    usermod -u 1000 ithacafv  && \
+    groupmod -g 1000 ithacafv
 #make sure everything is in place
 ENV HOME /home/$USER
 RUN chown -R $USER:$USER /home/$USER
@@ -40,5 +43,4 @@ RUN /bin/bash -c "source openfoam/openfoam2106/etc/bashrc && \
 USER $USER
 WORKDIR $HOME
 COPY .bashrc $HOME/.bashrc
-COPY .vimrc $HOME/.
 ENTRYPOINT ["/bin/bash"]
