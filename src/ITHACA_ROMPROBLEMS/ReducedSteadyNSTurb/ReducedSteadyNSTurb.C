@@ -261,7 +261,6 @@ void ReducedSteadyNSTurb::solveOnlineSUP(Eigen::MatrixXd vel)
     {
         for (int i = 0; i < nphiNut; i++)
         {
-            //newtonObject.gNut(i) = problem->rbfSplines[i]->eval(vel_now);
             newtonObjectSUP.gNut(i) = problem->rbfSplines[i]->eval(param);
             rbfCoeff = newtonObjectSUP.gNut;
         }
@@ -325,10 +324,15 @@ void ReducedSteadyNSTurb::solveOnlinePPE(Eigen::MatrixXd vel)
     newtonObjectPPE.bc.resize(N_BC);
     newtonObjectPPE.tauU = tauU;
 
+    Eigen::MatrixXd param(N_BC + 1 , 1);
+
     for (int j = 0; j < N_BC; j++)
     {
         newtonObjectPPE.bc(j) = vel_now(j, 0);
+        param(j, 0) = vel_now(j, 0);
     }
+
+    param(N_BC, 0) = nu;
 
     if (problem->viscCoeff == "L2")
     {
@@ -341,7 +345,7 @@ void ReducedSteadyNSTurb::solveOnlinePPE(Eigen::MatrixXd vel)
     {
         for (int i = 0; i < nphiNut; i++)
         {
-            newtonObjectPPE.gNut(i) = problem->rbfSplines[i]->eval(vel_now);
+            newtonObjectPPE.gNut(i) = problem->rbfSplines[i]->eval(param);
             rbfCoeff = newtonObjectPPE.gNut;
         }
     }
