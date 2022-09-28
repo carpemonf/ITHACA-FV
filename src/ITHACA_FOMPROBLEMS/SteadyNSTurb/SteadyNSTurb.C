@@ -702,6 +702,10 @@ void SteadyNSTurb::projectPPE(fileName folder, label NU, label NP, label NSUP,
                                                     SPLINTER::RadialBasisFunctionType::GAUSSIAN);
             ITHACAstream::SaveDenseMatrix(rbfSplines[i]->weights,
                                           "./ITHACAoutput/weightsPPE/", weightName);
+            ITHACAstream::exportMatrix(rbfSplines[i]->weights,
+                                       "wRBF_" + name(i), "eigen",
+                                        "./ITHACAoutput/weightsPPE/"
+                                      );
             std::cout << "Constructing RadialBasisFunction for mode " << i + 1 << std::endl;
         }
     }
