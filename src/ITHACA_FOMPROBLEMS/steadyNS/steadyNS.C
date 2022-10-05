@@ -288,6 +288,21 @@ void steadyNS::liftSolve()
         }
 
         Info << "Constructing velocity potential field Phi\n" << endl;
+        // Infer the velocity potential BCs from the pressure
+        wordList PhiBCTypes
+        (
+            p.boundaryField().size(),
+            zeroGradientFvPatchScalarField::typeName
+        );
+
+        forAll(p.boundaryField(), patchi)
+        {
+            if (p.boundaryField()[patchi].fixesValue())
+            {
+                PhiBCTypes[patchi] = fixedValueFvPatchScalarField::typeName;
+            }
+        }
+        Info << "Constructing velocity potential field Phi\n" << endl;
         volScalarField Phi
         (
             IOobject
@@ -300,7 +315,7 @@ void steadyNS::liftSolve()
             ),
             mesh,
             dimensionedScalar("Phi", dimLength * dimVelocity, 0),
-            p.boundaryField().types()
+            PhiBCTypes
         );
         label PhiRefCell = 0;
         scalar PhiRefValue = 0;
