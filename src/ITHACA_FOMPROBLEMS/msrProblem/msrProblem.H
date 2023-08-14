@@ -18,8 +18,6 @@
 #include "scalarMatrices.H"
 #include "SortableList.H"
 #include "volFieldsFwd.H"
-#include "forces.H"
-#include "forceCoeffs.H"
 #include "volFields.H"
 #include <fstream>
 #include <sstream>
